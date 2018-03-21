@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
@@ -10,6 +11,7 @@ server.listen(PORT, null, () => {
   console.log(`Listening on port ${PORT}`);
 });
 
+app.use(cors());
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
@@ -25,5 +27,10 @@ io.on('connection', socket => {
 
   socket.on('peer sdp', sdp => {
     socket.broadcast.emit('peer sdp', sdp);
+  });
+
+  socket.on('create or join', room => {
+    console.log('Received request to create or join room');
+
   });
 });
