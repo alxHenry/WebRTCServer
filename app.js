@@ -41,7 +41,6 @@ io.on('connection', socket => {
     console.log(`User ${userId} successfully joined room ${threadId}`);
   });
 
-  // TODO: userId is from user or to user?
   socket.on('msg', data => {
     const { toUserId, byUserId, threadId, type } = data;
 
