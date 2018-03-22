@@ -1,7 +1,8 @@
 const path = require('path');
-const express = require('express');
-const app = express();
 const cors = require('cors');
+const express = require('express');
+
+const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
@@ -19,18 +20,11 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', socket => {
-  console.log(`Socket connected: ${socket}`);
-
-  socket.on('new peer candidate', candidate => {
-    socket.broadcast.emit('new peer candidate', candidate);
+  socket.on('new peer candidate', (userId, threadId, candidate) => {
+    socket.broadcast.emit('new peer candidate', userId, threadId, candidate);
   });
 
-  socket.on('peer sdp', sdp => {
-    socket.broadcast.emit('peer sdp', sdp);
-  });
-
-  socket.on('create or join', room => {
-    console.log('Received request to create or join room');
-
+  socket.on('create or join room', (userId, threadId, desc) => {
+    socket.broadcast.emit('peer desc for thread', userId, threadId, desc);
   });
 });
